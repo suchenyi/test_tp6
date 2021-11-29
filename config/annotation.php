@@ -10,8 +10,8 @@ return [
         'controllers' => [],
     ],
     'model'  => [
-        'enable' => true,
+        'enable' => false,
     ],
     'ignore' => [],
-    'store'  => null,//缓存store
+    'store'  => null,//env('ANNOTATION.store', 'route'), // 缓存store
 ];
