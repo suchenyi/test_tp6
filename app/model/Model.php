@@ -2,6 +2,7 @@
 
 
 namespace app\model;
+use think\helper\Str;
 
 class Model extends \Xueluo\Library\Base\Model
 {

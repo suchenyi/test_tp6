@@ -2,7 +2,7 @@
 
 return [
     // 默认使用的数据库连接配置
-    'default'         => env('database.driver', 'mysql'),
+    'default'         => env('database.driver', 'xueluo'),
 
     // 自定义时间查询规则
     'time_query_rule' => [],
@@ -20,7 +20,7 @@ return [
 
     // 数据库连接配置信息
     'connections'     => [
-        'mysql' => [
+        'xueluo' => [
             // 数据库类型
             'type'            => env('database.type', 'mysql'),
             // 服务器地址
