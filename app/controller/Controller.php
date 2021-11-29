@@ -3,7 +3,7 @@
 namespace app\controller;
 
 use think\App;
-use Xueluo\Library\Exception\BusinessException;
+use think\annotation\route\Middleware;
 
 
 /**

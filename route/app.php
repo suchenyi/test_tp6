@@ -9,9 +9,8 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 use think\facade\Route;
+use think\facade\Config;
 
-Route::get('think', function () {
-    return 'hello,ThinkPHP6!';
+Route::miss(function () {
+    return json(['status' => 0, 'code' => 10002, 'msg' => '404 Not Found!']);
 });
-
-Route::get('hello/:name', 'index/hello');

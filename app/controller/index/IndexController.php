@@ -1,16 +1,18 @@
 <?php
 
 namespace app\controller\index;
-
+use think\annotation\route\Group;
+use think\annotation\Route;
 use app\controller\index\Controller;
-
+/**
+ * @Group("index")
+ */
 class IndexController extends Controller
 {
     /**
-     * @Notes:
-     * @Interface index
-     * @author: Suchenyi
-     * @Time: 2021/11/29   15:09
+     * @param  string $name 测试路由
+     * @return mixed
+     * @Route("index", method="GET")
      */
     public function index()
     {
