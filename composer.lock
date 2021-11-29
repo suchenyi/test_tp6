@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "239e8addb39874f826765f345e63cc71",
+    "content-hash": "190b5befdf28529d728df02a22b55f99",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -1287,16 +1287,16 @@
         },
         {
             "name": "xueluo/library",
-            "version": "1.0",
+            "version": "1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/suchenyi/tplibrary.git",
-                "reference": "cff39933127e70c4ed1cc598a19740b95daaa8fe"
+                "reference": "16cc7429639f6854d436f2c1ad9b926159cfa892"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/suchenyi/tplibrary/zipball/cff39933127e70c4ed1cc598a19740b95daaa8fe",
-                "reference": "cff39933127e70c4ed1cc598a19740b95daaa8fe",
+                "url": "https://api.github.com/repos/suchenyi/tplibrary/zipball/16cc7429639f6854d436f2c1ad9b926159cfa892",
+                "reference": "16cc7429639f6854d436f2c1ad9b926159cfa892",
                 "shasum": ""
             },
             "require": {
@@ -1316,9 +1316,9 @@
             ],
             "support": {
                 "issues": "https://github.com/suchenyi/tplibrary/issues",
-                "source": "https://github.com/suchenyi/tplibrary/tree/1.0"
+                "source": "https://github.com/suchenyi/tplibrary/tree/1.1"
             },
-            "time": "2021-11-29T03:38:34+00:00"
+            "time": "2021-11-29T07:05:10+00:00"
         }
     ],
     "packages-dev": [
