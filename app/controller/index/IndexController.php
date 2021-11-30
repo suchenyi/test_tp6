@@ -27,7 +27,6 @@ class IndexController extends Controller
     public function index()
     {
         $data = $this->admin_logic->getAdminList();
-
         return Result::success($data);
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "988917a261d94e5c656217515098c119",
+    "content-hash": "dcb93587cf732fec3f5913c93ba30104",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -591,6 +591,69 @@
                 }
             ],
             "time": "2021-10-06T17:43:30+00:00"
+        },
+        {
+            "name": "hg/apidoc",
+            "version": "v3.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/HGthecode/thinkphp-apidoc.git",
+                "reference": "6251dde39b9fb200bb69095fd874a0320a7b1db4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/HGthecode/thinkphp-apidoc/zipball/6251dde39b9fb200bb69095fd874a0320a7b1db4",
+                "reference": "6251dde39b9fb200bb69095fd874a0320a7b1db4",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/annotations": "^1.6",
+                "php": ">=7.1.0",
+                "symfony/class-loader": "~3.2.0"
+            },
+            "type": "think-extend",
+            "extra": {
+                "think": {
+                    "services": [
+                        "hg\\apidoc\\Service"
+                    ],
+                    "config": {
+                        "apidoc": "src/config.php"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "hg\\apidoc\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "hg-code",
+                    "email": "376401263@qq.com"
+                }
+            ],
+            "description": "thinkphp API文档自动生成",
+            "keywords": [
+                "apidoc",
+                "api文档",
+                "markdown",
+                "php api文档",
+                "php接口文档",
+                "thinkphp",
+                "接口文档",
+                "注释生成",
+                "自动生成api"
+            ],
+            "support": {
+                "issues": "https://github.com/HGthecode/thinkphp-apidoc/issues",
+                "source": "https://github.com/HGthecode/thinkphp-apidoc/tree/v3.0.6"
+            },
+            "time": "2021-11-09T07:28:49+00:00"
         },
         {
             "name": "league/flysystem",
