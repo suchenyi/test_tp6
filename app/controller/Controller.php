@@ -5,6 +5,16 @@ namespace app\controller;
 use think\App;
 use think\annotation\route\Middleware;
 
+use Xueluo\Library\Util\Result;
+use Xueluo\Library\Exception\BusinessException;
+use hg\apidoc\annotation\Title;
+use hg\apidoc\annotation\Group;
+use hg\apidoc\annotation\Desc;
+use hg\apidoc\annotation\Author;
+use hg\apidoc\annotation\Url;
+use hg\apidoc\annotation\Tag;
+use hg\apidoc\annotation\Param;
+use hg\apidoc\annotation\Returned;
 
 /**
  * app应用层公共控制器，app其余层公用控制器继承此控制器

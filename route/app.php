@@ -10,7 +10,12 @@
 // +----------------------------------------------------------------------
 use think\facade\Route;
 use think\facade\Config;
+//miss路由
 
 Route::miss(function () {
     return json(['status' => 0, 'code' => 10002, 'msg' => '404 Not Found!']);
 });
+
+
+
+

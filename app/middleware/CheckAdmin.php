@@ -23,6 +23,11 @@ class CheckAdmin
             "index/index",
             "auth/admin/reset_password",
             "auth/admin/device_id",
+            "apidoc/#/home",
+            "apidoc/config",
+            "apidoc/apiData",
+            "apidoc/mdMenus"
+
         ];
         if (in_array($request->pathinfo(), $whitePathInfo)) {
             return $next($request);

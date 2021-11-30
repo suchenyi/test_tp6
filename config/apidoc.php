@@ -9,7 +9,22 @@ return [
     // 允许跨域访问
     'allowCrossDomain'=>false,
     // 设置可选版本
-    'apps'           => [],
+    'apps'           => [
+        [
+            'title'=>'lang(apidoc.apps.admin)',
+            'path'=>'app\admin\controller',
+            'folder'=>'admin',
+            'groups'             => [
+                ['title'=>'基础模块','name'=>'base'],
+                ['title'=>'多级模块','name'=>'subMenu',
+                 'children'=>[
+                     ['title'=>'多级v1','name'=>'subv1',],
+                     ['title'=>'多级v2','name'=>'subv2'],
+                 ]
+                ],
+            ],
+        ]
+    ],
     // 自动生成url规则
     'auto_url' => [
         // 字母规则
