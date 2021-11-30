@@ -26,8 +26,12 @@ class IndexController extends Controller
      */
     public function index()
     {
-        $data = $this->admin_logic->getAdminList();
-        return Result::success($data);
+        $rand                    = rand(0, 9999);
+        $array["password"]       = md5(md5("Su123456") . $rand);
+        $array["encrypt"]        = $rand;
+        dump($array);
+//        $data = $this->admin_logic->getAdminList();
+//        return Result::success($data);
     }
 }
 
