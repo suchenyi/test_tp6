@@ -1,6 +1,7 @@
 <?php
 
 namespace app\logic\auth;
+
 use app\constants\ErrorCode;
 use app\logic\BaseLogic;
 use app\model\admin\AdminModel;
@@ -9,9 +10,8 @@ use app\model\admin\ResourceModel;
 use app\model\admin\RoleResourceModel;
 use app\model\admin\AdminDeviceModel;
 use app\model\admin\AdminLoginLogModel;
-
-//use app\util\AppEnv;
 use think\facade\Event;
+use think\facade\Session;
 use Xueluo\Library\Exception\BusinessException;
 
 class AdminLogic extends BaseLogic
@@ -24,6 +24,7 @@ class AdminLogic extends BaseLogic
      * @var string 设备号
      */
     protected $deviceId;
+
     public function __construct()
     {
         $this->admin_md = new AdminModel();
@@ -208,18 +209,19 @@ class AdminLogic extends BaseLogic
                 $admin->resource = array_merge($admin->resource, explode("\n", $value->urls));
             }
         }
-
         session('admin_id', $admin['id']);
         session('admin', json_encode($admin));
     }
+
     public function getAdminInfo()
     {
         $admin = session('admin');
         if (empty($admin)) {
-            throw new BusinessException(-1, 'nologin');
+            throw new BusinessException(-1, 'nologin_111');
         }
         return json_decode($admin);
     }
+
     /**
      * 登录设备号检测
      *
@@ -240,6 +242,7 @@ class AdminLogic extends BaseLogic
             throw new BusinessException(ErrorCode::LOGIN_DEVICE_ID_ERROR, "账号没有该设备号");
         }
     }
+
     /**
      * Notes：新增登录日志
      * User: suchenyi
@@ -252,6 +255,13 @@ class AdminLogic extends BaseLogic
         return 1;
     }
 
+    /**
+     * @Notes: 禁用用户
+     * @Interface denyAdmin
+     * @return bool
+     * @author: Suchenyi
+     * @Time: 2021/12/1   10:14
+     */
     public function denyAdmin()
     {
         return AdminModel::save([
@@ -259,10 +269,20 @@ class AdminLogic extends BaseLogic
         ]);
     }
 
+    /**
+     * @Notes: 获取设备号
+     * @Interface getDeviceData
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author: Suchenyi
+     * @Time: 2021/12/1   10:14
+     */
     protected function getDeviceData()
     {
         // 设备号返回信息
-        $deviceData = [];
+        $deviceData              = [];
         $deviceData['device_id'] = '';
         if ($this->deviceId) {
             // 设备号是否有效，如果有效，则沿用
@@ -273,9 +293,9 @@ class AdminLogic extends BaseLogic
         }
         if (empty($this->adminDeviceModel)) {
             $adminDeviceData = [
-                'status' => AdminDeviceModel::STATUS_NOT_VALIDATE,
-                'admin_id' => $this->admin_md->id,
-                'device_id' => $deviceData['device_id'] ?: md5(uniqid(). rand(0, 9999)),
+                'status'      => AdminDeviceModel::STATUS_NOT_VALIDATE,
+                'admin_id'    => $this->admin_md->id,
+                'device_id'   => $deviceData['device_id'] ?: md5(uniqid() . rand(0, 9999)),
                 'create_time' => time()
             ];
             (new AdminDeviceModel())->save($adminDeviceData);
@@ -286,5 +306,145 @@ class AdminLogic extends BaseLogic
 //        $deviceData['mobile'] = $sendSmsToAdmin->getMobile();
 //        $deviceData['realname'] = $sendSmsToAdmin->realname;
         return $deviceData;
+    }
+
+    /**
+     * @Notes: 新增/编辑用户
+     * @Interface save
+     * @param $array
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author: Suchenyi
+     * @Time: 2021/12/1   10:15
+     */
+    public function save($array)
+    {
+        if (!empty($array['id'])) {//更新
+            $currentAdmin = AdminModel::where('id', $array['id'])->find();
+            if (!$currentAdmin) {
+                throw new BusinessException(-1, '用户不存在', "");
+            }
+            //判断用户是否重复
+            if (!empty($array['username'])) {
+                $adminUser = AdminModel::where('username', $array['username'])
+                    ->where('id', '<>', $array['id'])->find();
+                if ($adminUser) {
+                    throw new BusinessException(-1, '该用户名已存在，请更换用户名', "");
+                }
+            }
+
+            if (!empty($array['mobile'])) {
+                $adminUser = AdminModel::where('mobile', $array['mobile'])
+                    ->where('id', '<>', $array['id'])
+                    ->find();
+                if ($adminUser) {
+                    throw new BusinessException(-1, '该手机号已存在，请更换手机号', "");
+                }
+            }
+            $admin_info = AdminModel::where('id', '=', $array['id'])->field("username,structure_id,status")->find();
+            if (!$admin_info) {
+                throw new BusinessException(-1, '成员信息不存在！', "");
+            }
+
+
+            $data = $array;
+            if ($array['password']) {
+                $rand                = rand(0, 9999);
+                $data["password"]    = md5(md5($array['password']) . $rand);
+                $data["encrypt"]     = $rand;
+                $data['expire_time'] = strtotime(date("Y-m-d 23:59:59")) + 86400 * 30;
+                // 最后密码修改时间
+                $data['last_password_modified_time'] = time();
+            } else {
+                unset($data['expire_time']);
+                unset($data['password']);
+            }
+
+
+            $data['modified_time'] = time();
+            $admin                 = AdminModel::update($data, ['id' => $array['id']]);
+            $role_id               = AdminRoleModel::where("admin_id", $array['id'])->column('role_id');
+            //新的权限-旧的权限获取新增权限然后插入
+            if (empty($array['role_id'])) {
+                $array['role_id'] = [];
+            }
+            $diff = array_diff($array['role_id'], $role_id);
+            foreach ($diff as $key => $value) {
+                AdminRoleModel::create([
+                    "admin_id" => $array['id'],
+                    "role_id"  => $value,
+                    "status"   => 1
+                ]);
+            }
+            //新的权限-旧的权限获取删除的权限然后删除
+            $diff = array_diff($role_id, $array['role_id']);
+            if (count($diff) > 0) {
+                AdminRoleModel::where("admin_id", $array['id'])->whereIn("role_id", $diff)->delete();
+            }
+            return $this->get($array['id']);
+        } else {//插入
+            //判断用户是否重复
+            if (!empty($array['username'])) {
+                $adminUser = AdminModel::where('username', $array['username'])->find();
+                if ($adminUser) {
+                    throw new BusinessException(-1, '该用户名已存在，请更换用户名');
+                }
+            }
+            if (!empty($array['mobile'])) {
+                $adminUser = AdminModel::where('mobile', $array['mobile'])->find();
+                if ($adminUser) {
+                    throw new BusinessException(-1, '该手机号已存在，请更换手机号');
+                }
+            }
+
+            $role_id_arr            = $array['role_id'];
+            $rand                   = rand(0, 9999);
+            $array["password"]      = md5(md5($array['password']) . $rand);
+            $array["encrypt"]       = $rand;
+            $array['create_time']   = time();
+            $array['modified_time'] = time();
+            $array['expire_time']   = strtotime(date("Y-m-d 23:59:59")) + 86400 * 365;
+
+            $admin = AdminModel::create($array);
+            if (is_array($role_id_arr) && count($role_id_arr) > 0) {
+                foreach ($role_id_arr as $value) {
+                    AdminRoleModel::create([
+                        'admin_id' => $admin->id,
+                        'role_id'  => $value,
+                        'status'   => 1
+                    ]);
+                }
+            }
+            return $this->get($admin->id);
+        }
+    }
+
+    /**
+     * @Notes: 获取用户信息
+     * @Interface get
+     * @param int $id
+     * @return mixed
+     * @author: Suchenyi
+     * @Time: 2021/12/1   10:15
+     */
+    public function get(int $id)
+    {
+        $admin = AdminModel::alias('admin')->field('admin.*,admin2.realname as parent_realname')
+            ->leftJoin(AdminModel::getTables("admin2"), "admin.pid = admin2.id")->with('role')->find($id);
+        if ($admin) {
+            $admin->password = '';
+            unset($admin->encrypt);
+            $admin->expire_time = date('Y-m-d', $admin->expire_time);
+        }
+        return $admin;
+    }
+
+    public function login_out()
+    {
+        $admin_json = session('admin', "");
+        $admin_id   = session('admin_id', json_encode([]));
+
     }
 }

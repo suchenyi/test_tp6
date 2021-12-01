@@ -3,7 +3,8 @@ declare (strict_types=1);
 
 namespace app\middleware;
 
-use app\model\base\AdminUserModel;
+use app\model\admin\AdminModel;
+
 //use app\logic\auth\UserLogic;
 use think\facade\Session;
 use Xueluo\Library\Util\Result;
@@ -20,14 +21,12 @@ class CheckAdmin
         // 白名单
         $whitePathInfo = [
             "auth/admin/login",
-            "index/index",
             "auth/admin/reset_password",
             "auth/admin/device_id",
             "apidoc/#/home",
             "apidoc/config",
             "apidoc/apiData",
             "apidoc/mdMenus"
-
         ];
         if (in_array($request->pathinfo(), $whitePathInfo)) {
             return $next($request);
@@ -40,7 +39,7 @@ class CheckAdmin
 
         // 登录信息
         $admin_json = session('admin');
-        $admin_id = session('admin_id');
+        $admin_id   = session('admin_id');
         if (empty($admin_json) || empty($admin_id)) {
             throw new BusinessException(-1, "nologin", [
                 'message' => '用户未登录',
@@ -48,17 +47,15 @@ class CheckAdmin
                 'admin_json' => $admin_json ?: ''
             ]);
         }
-        $admin = json_decode($admin_json, true);
-        $adminModel = AdminUserModel::where('id', $admin_id)->find();
+        $admin      = json_decode($admin_json, true);
+        $adminModel = AdminModel::where('id', $admin_id)->find();
         if (!$adminModel) {
-            throw new BusinessException(-1, "nologin", [
-                'message' => '用户不存在'
-            ]);
+            throw new BusinessException(-1, "nologin", ['message' => '用户不存在']);
         }
 
         // is_super外，需要验证是否有权限
         if ($admin['is_super'] != 1) {
-            $rule = $request->rule()->getRule();
+            $rule   = $request->rule()->getRule();
             $method = $request->rule()->getMethod();
 
             $route_url = $method . ':/' . $rule;

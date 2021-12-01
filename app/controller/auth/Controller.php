@@ -5,9 +5,9 @@ namespace app\controller\auth;
 use app\controller\Controller as adminController;
 
 /**
- * app\admin层公共控制器，admin层其余全部控制器继承此控制器
+ * app\auth层公共控制器，auth层其余全部控制器继承此控制器
  * Class Controller
- * @package app\controller\admin
+ * @package app\controller\auth
  */
 class Controller extends adminController
 {
