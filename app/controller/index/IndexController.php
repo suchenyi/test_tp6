@@ -7,6 +7,7 @@ use app\controller\index\Controller;
 use think\App;
 use app\middleware\CheckAdmin;
 use think\annotation\route\Middleware;
+use Xueluo\Library\Util\Result;
 use think\annotation\route\Resource;
 use think\annotation\route\Group;
 use think\annotation\Route;
@@ -18,12 +19,12 @@ use hg\apidoc\annotation as Apidoc;
  */
 class IndexController extends Controller
 {
-    public $admin_logic;
+    public $adminLogic;
 
     public function __construct()
     {
 
-        $this->admin_logic = new AdminLogic();
+        $this->adminLogic = new AdminLogic();
         parent::__construct();
     }
 
@@ -44,12 +45,12 @@ class IndexController extends Controller
      */
     public function index()
     {
-        $rand              = rand(0, 9999);
-        $array["password"] = md5(md5("Su123456") . $rand);
-        $array["encrypt"]  = $rand;
-        dump($array);
-//        $data = $this->admin_logic->getAdminList();
-//        return Result::success($data);
+//        $rand              = rand(0, 9999);
+//        $array["password"] = md5(md5("Su123456") . $rand);
+//        $array["encrypt"]  = $rand;
+//        dump($array);
+        $data = $this->adminLogic->get(1);
+        return Result::success($data);
     }
 }
 

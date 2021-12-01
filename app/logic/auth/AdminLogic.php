@@ -431,8 +431,11 @@ class AdminLogic extends BaseLogic
      */
     public function get(int $id)
     {
-        $admin = AdminModel::alias('admin')->field('admin.*,admin2.realname as parent_realname')
-            ->leftJoin(AdminModel::getTables("admin2"), "admin.pid = admin2.id")->with('role')->find($id);
+        $admin_md =  new AdminModel();
+        $admin = $admin_md->alias('admin')->field('admin.*,admin2.realname as parent_realname')
+            ->leftJoin(AdminModel::getTables("admin2"), "admin.pid = admin2.id")
+            ->with(["role"])
+            ->find($id);
         if ($admin) {
             $admin->password = '';
             unset($admin->encrypt);

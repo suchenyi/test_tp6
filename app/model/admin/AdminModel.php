@@ -2,6 +2,8 @@
 
 namespace app\model\admin;
 
+use app\model\admin\AdminRoleModel;
+use app\model\admin\RoleModel;
 use app\model\Model;
 
 class AdminModel extends Model{
@@ -42,4 +44,12 @@ class AdminModel extends Model{
         'create_time' => 'bigint',
         'modified_time' => 'bigint',
     ];
+
+
+    public function role()
+    {
+        return $this->belongsToMany(RoleModel::class, AdminRoleModel::class, 'role_id', 'admin_id');
+    }
+
+
 }
