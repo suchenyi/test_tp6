@@ -29,13 +29,12 @@ class RoleResourceModel extends Model
      * SELECT CONCAT("'",column_name,"' => '",data_type,"',") from information_schema.COLUMNS where table_name='x_role_resource'
      */
     protected $schema = [
-        'id' => 'int',//
-        'main_admin_id' => 'int',//公司主帐号admin_id
-        'role_id' => 'int',//角色id
-        'resource_id' => 'int',//权限id
-        'status' => 'tinyint',//状态 1：有效 2：无效
-        'created_at' => 'int',//插入时间
-        'updated_at' => 'int',//更新时间
-        'deleted_at' => 'int',//删除时间
+        'id' => 'int',
+        'role_id' => 'int',
+        'resource_id' => 'int',
+        'status' => 'tinyint',
+        'created_at' => 'int',
+        'updated_at' => 'int',
+        'deleted_at' => 'int',
     ];
 }

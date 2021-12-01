@@ -38,4 +38,9 @@ class RoleModel extends Model
         'modified_time' => 'int',//更新时间
         'deleted_at' => 'int',//软删除时间
     ];
+
+    function resource(){
+        return $this->belongsToMany(ResourceModel::class,'role_resource','resource_id','role_id')
+            ->wherePivot('deleted_at', '=', 0);
+    }
 }

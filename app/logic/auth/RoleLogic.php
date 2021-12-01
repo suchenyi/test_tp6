@@ -59,7 +59,7 @@ class RoleLogic extends BaseLogic
     public function save($array)
     {
         if (!empty($array['id'])) {//更新
-            if($array['status']==2 && $this->isUse($array['id'])){
+            if ($array['status'] == 2 && $this->isUse($array['id'])) {
                 throw new BusinessException(-1, "正在被使用的角色，不能禁用");
             }
 
@@ -74,9 +74,9 @@ class RoleLogic extends BaseLogic
             $diff = array_diff($resource, $resource_id);
             foreach ($diff as $key => $value) {
                 RoleResourceModel::create([
-                    "role_id" => $array['id'],
+                    "role_id"     => $array['id'],
                     "resource_id" => $value,
-                    "status" => 1
+                    "status"      => 1
                 ]);
             }
             //新的权限-旧的权限获取删除的权限然后删除
@@ -89,22 +89,24 @@ class RoleLogic extends BaseLogic
             $resource = $array['resource_id'];
             unset($array['resource_id']);
             $role = RoleModel::create($array);
+
             if (is_array($resource) && count($resource) > 0) {
                 foreach ($resource as $key => $value) {
                     RoleResourceModel::create([
-                        "role_id" => $role->id,
+                        "role_id"     => $role->id,
                         "resource_id" => $value,
-                        "status" => 1
+                        "status"      => 1
                     ]);
                 }
             }
+
             return $this->get($role->id)->toArray();
         }
     }
 
     public function delete($ids)
     {
-        if($this->isUse($ids)){
+        if ($this->isUse($ids)) {
             throw new BusinessException(-1, "正在被使用的角色，不能删除");
         }
         return RoleModel::whereIn('id', $ids)->delete();
@@ -131,12 +133,13 @@ class RoleLogic extends BaseLogic
         }
     }
 
-    function isUse($roleId){
-        if(!is_array($roleId)){
+    function isUse($roleId)
+    {
+        if (!is_array($roleId)) {
             $roleId = array($roleId);
         }
-        $role = AdminRoleModel::whereIn("role_id",$roleId)->field('id')->find();
-        if($role){
+        $role = AdminRoleModel::whereIn("role_id", $roleId)->field('id')->find();
+        if ($role) {
             return true;
         } else {
             return false;
@@ -150,7 +153,7 @@ class RoleLogic extends BaseLogic
      */
     public function getRoleArr()
     {
-        return $this->role_md->where("status",1)->field("id,name")->select()->toArray();
+        return $this->role_md->where("status", 1)->field("id,name")->select()->toArray();
     }
 
 }

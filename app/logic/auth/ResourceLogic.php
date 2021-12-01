@@ -47,7 +47,7 @@ class ResourceLogic extends Logic
     public function save($array)
     {
         if (!empty($array['parent_id'])) {
-            $parent = ResourceModel::find($array['parent_id']);
+            $parent         = ResourceModel::find($array['parent_id']);
             $array['level'] = $parent->level + 1;
         } else {
             $array['level'] = 1;

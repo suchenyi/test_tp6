@@ -136,7 +136,7 @@ class RoleController extends \app\controller\Controller
      *         required=true,
      *         OA\JsonContent(
      *             OA\Property(property="name",type="varchar",description="角色名称",example="角色名称"),
-     *             OA\Property(property="resource_id",type="arrty",description="资源id",example="资源id",OA\Items(ref="int")),
+     *             OA\Property(property="resource_id",type="array",description="资源id",example="资源id",OA\Items(ref="int")),
      *             OA\Property(property="status",type="tinyint",description="状态 1：有效 2：无效",example="状态 1：有效 2：无效"),
      *         )
      *     ),

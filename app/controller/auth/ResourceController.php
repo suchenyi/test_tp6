@@ -12,61 +12,13 @@ use think\annotation\Route;
 
 class ResourceController extends \app\controller\Controller
 {
-    private $resourceLogic;
+    private   $resourceLogic;
     protected $middleware = [Check::class];
 
     public function __construct()
     {
         $this->resourceLogic = new ResourceLogic();
     }
-
-    /**
-     * @api {GET} /auth/resource  新增--线索管理|公海管理
-     *
-     * @apiDescription
-     * author ：chenshaobin <br/> modified_time : 2020年11月05日14:31:21
-     *
-     * @apiName GET/auth/resource
-     * @apiGroup auth
-     *
-     * @apiParam {number} parent_id                 上级资源id
-     * @apiParam {number} [name]                    资源名称
-     * @apiParam {number} [status]                  状态1正常 2禁用"
-     * @apiParam {number} [page]                    页数
-     * @apiParam {number} [row]                     每页行数
-     *
-     * @apiSuccessExample Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *       "code": 200,
-     *       "msg": "success",
-     *       "data": {
-     *            "list":[{
-     *                "id": 1,
-     *                 "title": "权限名称",//权限名称
-     *                 "urls": "post:/auth/resource/{id}",//urls路径
-     *                 "parent_id": 0,//父级id
-     *                 "admin_id": 0,//管理员id
-     *                 "status": 1,//状态 1：有效 2：无效
-     *                 "level": 1,//权限层级
-     *                 "id_url": "585",//父级菜单路径
-     *                 "create_time": "2020-11-23 20:49:06",//插入时间
-     *                 "modified_time": "2020-11-23 20:49:06",//更新时间
-     *             },
-     *              ........
-     *            ],
-     *            total:100     //总条件
-     *        }
-     *   }
-     *
-     * @apiError  -1  参数错误
-     * @apiErrorExample Error-Response:
-     * {
-     *     "code": -1,
-     *     "data": [],
-     *     "msg": "参数错误"
-     *  }
-     */
 
     /**
      * notes ：获取数据--资源列表
@@ -78,60 +30,13 @@ class ResourceController extends \app\controller\Controller
     {
         $data = $this->resourceLogic->getList($request->get());
         $data = [
-            'list' => $data['data'],
+            'list'  => $data['data'],
             'total' => $data['total']
         ];
         return Result::success($data);
     }
 
 
-    /**
-     * @api {GET} /auth/resource  新增--线索管理|公海管理
-     *
-     * @apiDescription
-     * author ：chenshaobin <br/> modified_time : 2020年11月05日14:31:21
-     *
-     * @apiName GET/auth/resource
-     * @apiGroup auth
-     *
-     * @apiParam {number} parent_id                 上级资源id
-     * @apiParam {number} [name]                    资源名称
-     * @apiParam {number} [status]                  状态1正常 2禁用"
-     * @apiParam {number} [page]                    页数
-     * @apiParam {number} [row]                     每页行数
-     *
-     * @apiSuccessExample Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *       "code": 200,
-     *       "msg": "success",
-     *       "data": {
-     *            "list":[{
-     *                "id": 1,
-     *                 "title": "权限名称",//权限名称
-     *                 "urls": "post:/auth/resource/{id}",//urls路径
-     *                 "parent_id": 0,//父级id
-     *                 "admin_id": 0,//管理员id
-     *                 "status": 1,//状态 1：有效 2：无效
-     *                 "level": 1,//权限层级
-     *                 "id_url": "585",//父级菜单路径
-     *                 "create_time": "2020-11-23 20:49:06",//插入时间
-     *                 "modified_time": "2020-11-23 20:49:06",//更新时间
-     *             },
-     *              ........
-     *            ],
-     *            total:100     //总条件
-     *        }
-     *   }
-     *
-     * @apiError  -1  参数错误
-     * @apiErrorExample Error-Response:
-     * {
-     *     "code": -1,
-     *     "data": [],
-     *     "msg": "参数错误"
-     *  }
-     */
     /**
      * @route("/auth/resource/:id", method="get")
      */
@@ -242,7 +147,7 @@ class ResourceController extends \app\controller\Controller
             return Result::fail(-1, "修改数据必须提交id属性");
         }
         $param['id'] = $id;
-        $data = $this->resourceLogic->save($param);
+        $data        = $this->resourceLogic->save($param);
         return Result::success($data);
     }
 
